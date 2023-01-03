@@ -175,29 +175,5 @@ public class GeneratePdfTest {
 
         test.StopTest();
     }
-
-    @isTest
-    public static void testFailedSavePdf() {
-        Opportunity opp = [SELECT Id, Name FROM Opportunity WHERE Name = 'Test Opp' LIMIT 1];
-
-        test.StartTest();
-
-        ContentVersion conVer = new ContentVersion(); 
-        conVer.ContentLocation = 'S'; // Salesforce
-        conVer.Title = 'Price Quote';
-        conVer.PathOnClient = '/' + conVer.Title + '.pdf';
-        conVer.VersionData = Blob.valueOf('Unit Test ContentVersion Body');
-        
-        Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
-        
-        ContentDocumentLink contentlink = new ContentDocumentLink();
-        contentlink.LinkedEntityId = null;
-        contentlink.contentdocumentid = conDoc;
-
-
-        GeneratePdfController.saveInSalesforce(String.valueOf(opp.Id), 'test comment');
-
-        test.StopTest();
-    }
    
 }

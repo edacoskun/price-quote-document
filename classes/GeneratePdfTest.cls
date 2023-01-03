@@ -10,7 +10,7 @@ public class GeneratePdfTest {
         Contact conRecord = new Contact();
         conRecord.Lastname = 'test';
         conRecord.Email = 'test@test.com';
-	    insert conRecord;
+	insert conRecord;
 
         Opportunity oppRecord = new Opportunity();
         oppRecord.AccountId = accRecord.Id;
@@ -41,12 +41,6 @@ public class GeneratePdfTest {
         oppLineItem.Quantity = 6;
         oppLineItem.TotalPrice = oppLineItem.Quantity * pbEntry.UnitPrice;
         insert oppLineItem;
-
-        Attachment attachment = new Attachment();
-	    attachment.Name = 'test';
-	    attachment.Body = Blob.ValueOf('test');
-	    attachment.ParentId = oppRecord.id;
-        insert attachment;
     }
 
     @isTest
@@ -97,8 +91,6 @@ public class GeneratePdfTest {
         pageRef.getparameters().put('id', String.valueOf(opp.Id));
         test.setCurrentPage(pageRef);
 
-        //Blob b = pageRef.getContent();
-
         GeneratePdfController.getPdf(String.valueOf(opp.Id), 'test comment');
          
         test.StopTest();
@@ -137,7 +129,6 @@ public class GeneratePdfTest {
         List<String> testToAddress = new List<String>();
         testToAddress.add('edacoskun@gmail.com');
 
-        //GeneratePdfController testSendEmail = new GeneratePdfController();
         GeneratePdfController.sendEmail(testToAddress, String.valueOf(opp.Id), 'test comment');
 
         test.StopTest();
@@ -156,7 +147,6 @@ public class GeneratePdfTest {
 
         List<String> testToAddress = new List<String>();
 
-        //GeneratePdfController testSendEmail = new GeneratePdfController();
         GeneratePdfController.sendEmail(testToAddress, String.valueOf(opp.Id), 'test comment');
 
         test.StopTest();
@@ -174,14 +164,12 @@ public class GeneratePdfTest {
         content.PathOnClient = '/' + content.Title + '.pdf'; 
         Blob bodyBlob = Blob.valueOf('Unit Test ContentVersion Body'); 
         content.VersionData = bodyBlob; 
-        insert content;
 
         ContentDocumentLink contentlink = new ContentDocumentLink();
         contentlink.LinkedEntityId = opp.Id;
         contentlink.contentdocumentid = [SELECT contentdocumentid FROM contentversion WHERE Id =: content.Id].contentdocumentid;
         contentlink.ShareType = 'I'; // Inferred permission
         contentlink.Visibility = 'AllUsers';
-        insert contentlink;
 
         GeneratePdfController.saveInSalesforce(String.valueOf(opp.Id), 'test comment');
 
@@ -200,16 +188,11 @@ public class GeneratePdfTest {
         conVer.PathOnClient = '/' + conVer.Title + '.pdf';
         conVer.VersionData = Blob.valueOf('Unit Test ContentVersion Body');
         
-        insert conVer;
-
         Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
         
         ContentDocumentLink contentlink = new ContentDocumentLink();
         contentlink.LinkedEntityId = null;
         contentlink.contentdocumentid = conDoc;
-        //contentlink.ShareType = 'I'; // Inferred permission
-        //contentlink.Visibility = 'AllUsers';
-        insert contentlink;
 
 
         GeneratePdfController.saveInSalesforce(String.valueOf(opp.Id), 'test comment');
